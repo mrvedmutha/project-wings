@@ -1,0 +1,172 @@
+<style>
+.blog-single__heading {
+  opacity: 0;
+}
+
+.blog-single__heading-line {
+  display: block;
+  overflow: hidden;
+}
+
+.blog-single__heading-line-inner {
+  display: block;
+}
+
+</style>
+
+ <script
+      src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"
+      defer
+    ></script>
+<script
+      src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"
+      defer
+    ></script>
+<script>
+(function () {
+  console.log("[title-reveal] Script loaded");
+  gsap.registerPlugin(ScrollTrigger);
+
+  function splitLines(el) {
+    const originalNodes = Array.from(el.childNodes);
+    const items = [];
+
+    // Walk child nodes: split text nodes into word spans, preserve inline elements
+    originalNodes.forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent.replace(/\s+/g, " ").trim();
+        if (text) {
+          text.split(" ").forEach((word) => {
+            if (word) {
+              const span = document.createElement("span");
+              span.className = "__tr-word";
+              span.textContent = word;
+              items.push(span);
+            }
+          });
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const clone = node.cloneNode(true);
+        clone.classList.add("__tr-element");
+        items.push(clone);
+      }
+    });
+
+    // Render items so we can measure their vertical position
+    el.innerHTML = "";
+    items.forEach((item, i) => {
+      el.appendChild(item);
+      if (item.classList.contains("__tr-word") && i < items.length - 1) {
+        el.appendChild(document.createTextNode(" "));
+      }
+    });
+
+    // Group items into visual lines by offsetTop
+    const allItems = el.querySelectorAll(".__tr-word, .__tr-element");
+    const lines = [];
+    let currentTop = null;
+    let currentLine = [];
+
+    allItems.forEach((item) => {
+      const top = item.offsetTop;
+      if (currentTop === null || top === currentTop) {
+        currentLine.push(item);
+      } else {
+        lines.push(currentLine);
+        currentLine = [item];
+      }
+      currentTop = top;
+    });
+    if (currentLine.length) lines.push(currentLine);
+
+    // Rebuild with BEM line wrappers
+    el.innerHTML = "";
+    lines.forEach((line) => {
+      const lineWrapper = document.createElement("span");
+      lineWrapper.className = "blog-single__heading-line";
+
+      const lineInner = document.createElement("span");
+      lineInner.className = "blog-single__heading-line-inner";
+
+      line.forEach((item, idx) => {
+        item.classList.remove("__tr-word", "__tr-element");
+        lineInner.appendChild(item);
+        if (idx < line.length - 1) {
+          lineInner.appendChild(document.createTextNode(" "));
+        }
+      });
+
+      lineWrapper.appendChild(lineInner);
+      el.appendChild(lineWrapper);
+    });
+
+    return lines;
+  }
+
+  let scrollTriggers = [];
+
+  function animateLines(el) {
+    const lineInners = el.querySelectorAll(".blog-single__heading-line-inner");
+    if (!lineInners.length) return;
+
+    gsap.set(el, { opacity: 1 });
+    gsap.set(lineInners, { yPercent: 150, skewY: 1.5 });
+
+    const tween = gsap.to(lineInners, {
+      yPercent: 0,
+      skewY: 0,
+      ease: "power4.out",
+      stagger: 0.25,
+      duration: 0.8,
+      scrollTrigger: {
+        trigger: el,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    if (tween.scrollTrigger) {
+      scrollTriggers.push(tween.scrollTrigger);
+    }
+  }
+
+  function init() {
+    const elements = document.querySelectorAll(".blog-single__heading");
+    console.log("[title-reveal] init() called");
+    console.log("[title-reveal] elements found:", elements.length, elements);
+
+    if (!elements.length) {
+      console.warn(
+        "[title-reveal] No elements with .blog-single__heading found. Check if the class is applied.",
+      );
+      return;
+    }
+
+    elements.forEach((el) => {
+      console.log("[title-reveal] Processing element:", el);
+      splitLines(el);
+      animateLines(el);
+    });
+  }
+
+  document.fonts.ready.then(() => {
+    requestAnimationFrame(() => requestAnimationFrame(init));
+  });
+
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      scrollTriggers.forEach((st) => st.kill());
+      scrollTriggers = [];
+      init();
+    }, 400);
+  });
+})();
+
+
+</script>

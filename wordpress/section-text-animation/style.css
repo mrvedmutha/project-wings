@@ -1,0 +1,64 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", sans-serif;
+  background: radial-gradient(
+    129% 99% at 112% 85%,
+    rgb(223, 220, 255) 20%,
+    rgb(166, 158, 255) 90%
+  );
+}
+
+.container {
+  max-width: 80vw;
+}
+
+.split {
+  opacity: 1;
+  text-align: left;
+  color: rgb(14, 16, 15);
+  font-size: clamp(2rem, 5rem, 3vw);
+  letter-spacing: 0.05rem;
+  will-change: transform;
+  color: #0e100f;
+}
+
+.split * {
+  will-change: transform;
+}
+
+.text-indent {
+  text-indent: 25%;
+}
+
+.line {
+  text-indent: 0 !important;
+}
+
+button {
+  display: inline-block;
+  outline: none;
+  padding: 8px 14px;
+  background: transparent;
+  border: solid 4px #0e100f;
+  color: #0e100f;
+  text-decoration: none;
+  border-radius: 99px;
+  padding: 12px 25px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 18px;
+}

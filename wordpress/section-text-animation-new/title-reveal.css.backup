@@ -1,0 +1,14 @@
+.blog-single__heading .elementor-heading-title,
+.blog-single__heading:not(:has(.elementor-heading-title)) {
+  opacity: 0;
+}
+
+.blog-single__heading-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.05em;
+}
+
+.blog-single__heading-line-inner {
+  display: block;
+}

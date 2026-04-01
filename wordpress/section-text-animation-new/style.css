@@ -1,0 +1,30 @@
+.split {
+  opacity: 0;
+}
+
+.text-indent {
+  text-indent: 25%;
+}
+
+/* Line mask wrapper — clip only top/bottom, leave left/right open */
+.line {
+  display: block;
+  overflow: clip;
+  overflow-clip-margin: content-box;
+  clip-path: inset(-5px -100% -5px -100%);
+  padding-bottom: 5px;
+}
+
+/* Only the first line keeps text-indent, rest resets to 0 */
+.line + .line {
+  text-indent: 0;
+}
+
+.line-inner {
+  display: block;
+}
+
+.vid-size {
+  width: 80px;
+  height: auto;
+}

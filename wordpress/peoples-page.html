@@ -1,0 +1,188 @@
+<div class="peoples-page__gsap-slider__track">
+  <div class="peoples-page__gsap-slide is-active">
+    [elementor-template id="35534"]
+  </div>
+
+  <div class="peoples-page__gsap-slide">[elementor-template id="35535"]</div>
+
+  <div class="peoples-page__gsap-slide">[elementor-template id="35536"]</div>
+
+  <!-- Add more slides as needed -->
+</div>
+
+<!-- GSAP -->
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const slider = document.querySelector(".peoples-page__gsap-slider");
+    if (!slider) return;
+
+    const slides = Array.from(
+      slider.querySelectorAll(".peoples-page__gsap-slide"),
+    );
+    const nextBtn = slider.querySelector(".peoples-page__slider-next");
+    const prevBtn = slider.querySelector(".peoples-page__slider-prev");
+
+    if (!slides.length) return;
+
+    let current = slides.findIndex((s) => s.classList.contains("is-active"));
+    if (current < 0) {
+      current = 0;
+      slides[0].classList.add("is-active");
+    }
+
+    let animating = false;
+    const total = slides.length;
+
+    function init() {
+      slides.forEach((slide, i) => {
+        const img = slide.querySelector(
+          ".peoples-page__gsap-image-box .elementor-image-box-img img",
+        );
+
+        const boxContent = slide.querySelector(
+          ".peoples-page__gsap-image-box .elementor-image-box-content",
+        );
+
+        const heading = slide.querySelector(".peoples-page__gsap-heading");
+
+        if (i === current) {
+          gsap.set(img, { clipPath: "inset(0% 0% 0% 0%)" });
+          gsap.set([boxContent, heading], { opacity: 1, y: 0 });
+        } else {
+          gsap.set(img, { clipPath: "inset(0% 0% 100% 0%)" });
+          gsap.set([boxContent, heading], { opacity: 0, y: 20 });
+        }
+      });
+    }
+
+    function goTo(index, direction) {
+      if (animating || index === current) return;
+      animating = true;
+
+      const fromSlide = slides[current];
+      const toSlide = slides[index];
+
+      const fromImg = fromSlide.querySelector(
+        ".peoples-page__gsap-image-box .elementor-image-box-img img",
+      );
+
+      const toImg = toSlide.querySelector(
+        ".peoples-page__gsap-image-box .elementor-image-box-img img",
+      );
+
+      const fromContent = fromSlide.querySelector(
+        ".peoples-page__gsap-image-box .elementor-image-box-content",
+      );
+
+      const toContent = toSlide.querySelector(
+        ".peoples-page__gsap-image-box .elementor-image-box-content",
+      );
+
+      const fromHeading = fromSlide.querySelector(
+        ".peoples-page__gsap-heading",
+      );
+
+      const toHeading = toSlide.querySelector(".peoples-page__gsap-heading");
+
+      toSlide.classList.add("is-active");
+
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.inOut" },
+        onComplete: () => {
+          fromSlide.classList.remove("is-active");
+          current = index;
+          animating = false;
+        },
+      });
+
+      /* EXIT IMAGE */
+      if (direction === 1) {
+        tl.to(
+          fromImg,
+          {
+            clipPath: "inset(100% 0% 0% 0%)",
+            duration: 0.7,
+          },
+          0,
+        );
+      } else {
+        tl.to(
+          fromImg,
+          {
+            clipPath: "inset(0% 0% 100% 0%)",
+            duration: 0.7,
+          },
+          0,
+        );
+      }
+
+      /* EXIT TEXT (name + heading) */
+      tl.to(
+        [fromContent, fromHeading],
+        {
+          opacity: 0,
+          y: 20,
+          duration: 0.45,
+          stagger: 0.05,
+        },
+        0,
+      );
+
+      /* PREP NEXT IMAGE */
+      if (direction === 1) {
+        gsap.set(toImg, { clipPath: "inset(0% 0% 100% 0%)" });
+      } else {
+        gsap.set(toImg, { clipPath: "inset(100% 0% 0% 0%)" });
+      }
+
+      /* ENTER IMAGE */
+      tl.to(
+        toImg,
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 0.7,
+        },
+        0.25,
+      );
+
+      /* ENTER TEXT */
+      tl.to(
+        [toContent, toHeading],
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+        },
+        0.35,
+      );
+    }
+
+    /* NEXT */
+    nextBtn?.addEventListener("click", () => {
+      const next = (current + 1) % total;
+      goTo(next, 1);
+    });
+
+    /* PREV */
+    prevBtn?.addEventListener("click", () => {
+      const prev = (current - 1 + total) % total;
+      goTo(prev, -1);
+    });
+
+    init();
+  });
+</script>
+
+<!--
+        CSS Classes
+        .peoples-page__gsap-slider // The main slider container
+        .peoples-page__gsap-slider__track // The track that holds all slides
+        .peoples-page__gsap-slide // Each individual slide
+        .peoples-page__gsap-image-box // The container for the image and content
+        .peoples-page__gsap-heading // The heading element within each slide
+        .peoples-page__slider-next // The "Next" button
+        .peoples-page__slider-prev // The "Previous" button
+-->

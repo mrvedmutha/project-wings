@@ -1,0 +1,16 @@
+/* ── Blog Title Reveal ── */
+/* Hide heading until GSAP is ready (prevents flash of unstyled text) */
+.blog-single__heading .elementor-heading-title {
+  opacity: 0;
+}
+
+/* Line mask — clips child content so lines can slide up from below */
+.btr-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em; /* breathing room for descenders */
+}
+
+.btr-line-inner {
+  display: block;
+}

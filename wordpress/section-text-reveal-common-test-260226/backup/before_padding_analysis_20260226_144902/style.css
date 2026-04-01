@@ -1,0 +1,198 @@
+/* Graphik Font Family */
+
+/* Thin */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-ThinItalic.ttf") format("truetype");
+  font-weight: 100;
+  font-style: italic;
+}
+
+/* Extralight */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Extralight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-ExtralightItalic.ttf")
+    format("truetype");
+  font-weight: 200;
+  font-style: italic;
+}
+
+/* Light */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* Regular */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-RegularItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Medium */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* Semibold */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Semibold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-SemiboldItalic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Bold */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* Super */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Super.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-SuperItalic.ttf") format("truetype");
+  font-weight: 800;
+  font-style: italic;
+}
+
+/* Black */
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("assets/fonts/Graphik/Graphik-BlackItalic.ttf") format("truetype");
+  font-weight: 900;
+  font-style: italic;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-family: "Graphik", sans-serif;
+  font-size: 75px;
+  font-weight: 400;
+  line-height: 77px;
+  letter-spacing: -5.8px;
+}
+
+p {
+  width: 60%;
+  font-family: "Graphik", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.6px;
+}
+
+.text-intent {
+  text-indent: 25%;
+}
+
+/* Split Text Animation Styles */
+[data-split-text] {
+  display: block;
+  text-indent: inherit;
+  letter-spacing: inherit;
+}
+
+.split-mask-c {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+  text-indent: 0;
+  margin-right: 0.27em;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.split-w {
+  display: inline-block;
+  text-indent: 0;
+}
+
+.split-is {
+  display: inline-block;
+  text-indent: 0;
+  letter-spacing: inherit;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+/* Special handling for video elements */
+.split-element {
+  vertical-align: middle;
+}

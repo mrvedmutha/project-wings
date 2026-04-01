@@ -1,0 +1,100 @@
+// Register GSAP ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
+// Function to split text for elements with class 'split'
+function initSplitTextAnimation() {
+  const splitElements = document.querySelectorAll(".split");
+
+  splitElements.forEach((element) => {
+    // Store original HTML content
+    const originalHTML = element.innerHTML;
+
+    // Create temporary container to parse HTML
+    const tempContainer = document.createElement("div");
+    tempContainer.innerHTML = originalHTML;
+
+    // Create parent span with data-split-text attribute
+    const parentSpan = document.createElement("span");
+    parentSpan.setAttribute("data-split-text", "");
+
+    // Function to process each node (text or element)
+    function processNode(node) {
+      const wrappedElements = [];
+
+      if (node.nodeType === Node.TEXT_NODE) {
+        // Split text into words
+        const text = node.textContent;
+        const words = text.split(" ").filter((word) => word.length > 0);
+
+        words.forEach((word) => {
+          // Create mask container span
+          const maskSpan = document.createElement("span");
+          maskSpan.className = "split-mask-c";
+
+          // Create inner span with the word
+          const innerSpan = document.createElement("span");
+          innerSpan.className = "split-w split-is";
+          innerSpan.textContent = word + " ";
+
+          maskSpan.appendChild(innerSpan);
+          wrappedElements.push(maskSpan);
+        });
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        // Wrap elements (like video) in the same structure
+        const maskSpan = document.createElement("span");
+        maskSpan.className = "split-mask-c";
+
+        const innerSpan = document.createElement("span");
+        innerSpan.className = "split-w split-is";
+        innerSpan.appendChild(node.cloneNode(true));
+
+        maskSpan.appendChild(innerSpan);
+        wrappedElements.push(maskSpan);
+      }
+
+      return wrappedElements;
+    }
+
+    // Process all child nodes
+    const childNodes = Array.from(tempContainer.childNodes);
+    childNodes.forEach((node) => {
+      const wrapped = processNode(node);
+      wrapped.forEach((el) => parentSpan.appendChild(el));
+    });
+
+    // Replace original content with new structure
+    element.innerHTML = "";
+    element.appendChild(parentSpan);
+
+    // Get all inner spans for animation
+    const animateElements = parentSpan.querySelectorAll(".split-is");
+
+    // GSAP animation with ScrollTrigger
+    gsap.from(animateElements, {
+      scrollTrigger: {
+        trigger: element,
+        start: "top 80%",
+        toggleActions: "play none none none",
+        markers: true, // Debug mode - set to false in production
+      },
+      yPercent: 100,
+      skewY: -5,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.05,
+      ease: "expo.out",
+    });
+  });
+}
+
+// Initialize after DOM is loaded and fonts are ready
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      initSplitTextAnimation();
+    });
+  } else {
+    // Fallback if fonts API is not available
+    initSplitTextAnimation();
+  }
+});

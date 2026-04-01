@@ -1,0 +1,111 @@
+// Register GSAP ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
+// Function to split text for elements with class 'split'
+function initSplitTextAnimation() {
+  const splitElements = document.querySelectorAll(".split");
+
+  splitElements.forEach((element) => {
+    // Store original HTML content
+    const originalHTML = element.innerHTML;
+
+    // Create temporary container to parse HTML
+    const tempContainer = document.createElement("div");
+    tempContainer.innerHTML = originalHTML;
+
+    // Create parent span with data-split-text attribute
+    const parentSpan = document.createElement("span");
+    parentSpan.setAttribute("data-split-text", "");
+
+    // Extract all text nodes and element nodes separately
+    const nodes = [];
+
+    function extractNodes(parentNode) {
+      Array.from(parentNode.childNodes).forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent;
+          // Clean whitespace: replace multiple spaces/newlines with single space
+          const cleanText = text.replace(/\s+/g, " ").trim();
+          if (cleanText.length > 0) {
+            nodes.push({ type: "text", content: cleanText });
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          // For elements like video, store the element itself
+          nodes.push({ type: "element", content: node.cloneNode(true) });
+        }
+      });
+    }
+
+    // Extract all nodes from temp container (only direct children, not recursive)
+    extractNodes(tempContainer);
+
+    // Now split text nodes into words while preserving element positions
+    nodes.forEach((node, nodeIndex) => {
+      if (node.type === "text") {
+        // Split text into words
+        const words = node.content.split(" ").filter((word) => word.length > 0);
+
+        words.forEach((word) => {
+          // Create mask container span
+          const maskSpan = document.createElement("span");
+          maskSpan.className = "split-mask-c";
+
+          // Create inner span with the word
+          const innerSpan = document.createElement("span");
+          innerSpan.className = "split-w split-is";
+          // Add space after word for proper spacing
+          innerSpan.textContent = word + " ";
+
+          maskSpan.appendChild(innerSpan);
+          parentSpan.appendChild(maskSpan);
+        });
+      } else if (node.type === "element") {
+        // Wrap elements (like video) in the same structure
+        const maskSpan = document.createElement("span");
+        maskSpan.className = "split-mask-c split-element";
+
+        const innerSpan = document.createElement("span");
+        innerSpan.className = "split-w split-is";
+        innerSpan.appendChild(node.content);
+
+        maskSpan.appendChild(innerSpan);
+        parentSpan.appendChild(maskSpan);
+      }
+    });
+
+    // Replace original content with new structure
+    element.innerHTML = "";
+    element.appendChild(parentSpan);
+
+    // Get all inner spans for animation
+    const animateElements = parentSpan.querySelectorAll(".split-is");
+
+    // GSAP animation with ScrollTrigger
+    gsap.from(animateElements, {
+      scrollTrigger: {
+        trigger: element,
+        start: "top 80%",
+        toggleActions: "play none none none",
+        markers: false, // Debug mode - set to true for debugging
+      },
+      yPercent: 100,
+      skewY: -5,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.02,
+      ease: "expo.out",
+    });
+  });
+}
+
+// Initialize after DOM is loaded and fonts are ready
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      initSplitTextAnimation();
+    });
+  } else {
+    // Fallback if fonts API is not available
+    initSplitTextAnimation();
+  }
+});
